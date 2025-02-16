@@ -4,11 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TireScan - Analisi Pneumatici</title>
+
   <!-- Manifest per la PWA -->
   <link rel="manifest" href="manifest.json">
+
+  <!-- Foglio di stile -->
   <link rel="stylesheet" href="style.css">
-  <!-- OpenCV.js -->
-  <script async src="opencv.js"></script>
+
+  <!-- OpenCV.js da CDN -->
+  <script src="https://docs.opencv.org/4.x/opencv.js"></script>
+
   <!-- jsPDF per PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
@@ -24,6 +29,7 @@
   <canvas id="canvas2"></canvas>
   <canvas id="output"></canvas>
 
+  <!-- Script principale della PWA -->
   <script src="app.js"></script>
 </body>
 </html>
