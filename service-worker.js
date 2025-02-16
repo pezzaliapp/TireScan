@@ -2,7 +2,7 @@ self.addEventListener("install", event => {
   event.waitUntil(
     caches.open("tireScan-cache").then(cache => {
       return cache.addAll([
-        "./",  // root della cartella
+        "./",             // la root della tua cartella su GitHub Pages
         "./index.html",
         "./style.css",
         "./app.js",
