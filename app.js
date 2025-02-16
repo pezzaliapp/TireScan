@@ -6,10 +6,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const captureButton = document.getElementById("capture");
     const compareButton = document.getElementById("compare");
     const savePDFButton = document.getElementById("savePDF");
+    const installBtn = document.getElementById("installBtn");
 
     let firstImageCaptured = false;
 
-    // Attiva la fotocamera posteriore
+    // Attiva la fotocamera posteriore (con fallback)
     navigator.mediaDevices.getUserMedia({
         video: { facingMode: { exact: "environment" } }
     })
@@ -18,8 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
     .catch(err => {
         console.error("Errore nell'accesso alla fotocamera:", err);
-        // In caso di errore (ad es. alcuni dispositivi non supportano exact),
-        // puoi tentare un fallback senza exact:
+        // Fallback
         return navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
     })
     .then(stream => {
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
         targetCanvas.height = video.videoHeight;
         ctx.drawImage(video, 0, 0, targetCanvas.width, targetCanvas.height);
 
-        // Inverte il flag, così la prossima volta salviamo nell'altro canvas
+        // Inverte il flag
         firstImageCaptured = !firstImageCaptured;
 
         // Se abbiamo appena salvato sul primo canvas, elaboriamo quell'immagine
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function compareImages() {
-        // Se firstImageCaptured è true, vuol dire che non abbiamo catturato la seconda immagine
+        // Controllo presenza di 2 immagini
         if (firstImageCaptured) {
             alert("Devi acquisire due immagini per confrontarle!");
             return;
@@ -112,9 +112,35 @@ document.addEventListener("DOMContentLoaded", function() {
         pdf.save("report_pneumatico.pdf");
     }
 
+    // ---------------------------
+    // Gestione installazione PWA
+    // ---------------------------
+    let deferredPrompt;
+    window.addEventListener("beforeinstallprompt", (e) => {
+        // Previene la mini-infobar di Chrome su Android
+        e.preventDefault();
+        deferredPrompt = e;
+        // Mostra il pulsante dedicato all'installazione
+        installBtn.style.display = "inline-block";
+    });
+
+    installBtn.addEventListener("click", async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === "accepted") {
+                console.log("Installata!");
+            } else {
+                console.log("Installazione rifiutata");
+            }
+            deferredPrompt = null;
+            installBtn.style.display = "none";
+        }
+    });
+
     // Registrazione del Service Worker
     if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/service-worker.js")
+        navigator.serviceWorker.register("./service-worker.js")
         .then(reg => console.log("Service Worker registrato con successo!", reg))
         .catch(err => console.log("Errore nella registrazione del Service Worker", err));
     }
