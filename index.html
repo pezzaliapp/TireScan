@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TireScan - Analisi Pneumatici</title>
-    <link rel="stylesheet" href="style.css">
-    <script async src="opencv.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TireScan - Analisi Pneumatici</title>
+  <!-- Manifest per la PWA -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <!-- OpenCV.js -->
+  <script async src="opencv.js"></script>
+  <!-- jsPDF per PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <h1>TireScan - Analisi Usura Pneumatici</h1>
+  <h1>TireScan - Analisi Usura Pneumatici</h1>
 
-    <video id="video" autoplay></video>
-    <button id="capture">Scatta Foto</button>
-    <button id="compare">Confronta Due Immagini</button>
-    <button id="savePDF">Salva Report in PDF</button>
+  <video id="video" autoplay></video>
+  <button id="capture">Scatta Foto</button>
+  <button id="compare">Confronta Due Immagini</button>
+  <button id="savePDF">Salva Report in PDF</button>
 
-    <canvas id="canvas"></canvas>
-    <canvas id="canvas2"></canvas>
-    <canvas id="output"></canvas>
+  <canvas id="canvas"></canvas>
+  <canvas id="canvas2"></canvas>
+  <canvas id="output"></canvas>
 
-    <script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
