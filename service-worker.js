@@ -6,7 +6,6 @@ self.addEventListener("install", event => {
         "/index.html",
         "/style.css",
         "/app.js",
-        "/opencv.js",
         "/manifest.json",
         "/icons/TireScan-192.png",
         "/icons/TireScan-512.png"
