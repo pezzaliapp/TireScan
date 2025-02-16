@@ -2,6 +2,7 @@
   "name": "TireScan - Analisi Pneumatici",
   "short_name": "TireScan",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#007bff",
