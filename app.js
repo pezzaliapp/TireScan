@@ -9,12 +9,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
     let firstImageCaptured = false;
 
-    // Attivazione fotocamera
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            video.srcObject = stream;
-        })
-        .catch(err => console.error("Errore nell'accesso alla fotocamera:", err));
+    // Attiva la fotocamera posteriore
+    navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: "environment" } }
+    })
+    .then(stream => {
+        video.srcObject = stream;
+    })
+    .catch(err => {
+        console.error("Errore nell'accesso alla fotocamera:", err);
+        // In caso di errore (ad es. alcuni dispositivi non supportano exact),
+        // puoi tentare un fallback senza exact:
+        return navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+    })
+    .then(stream => {
+        if (stream) video.srcObject = stream;
+    })
+    .catch(err => console.error("Errore nel fallback fotocamera:", err));
 
     captureButton.addEventListener("click", function() {
         captureImage();
@@ -36,8 +47,10 @@ document.addEventListener("DOMContentLoaded", function() {
         targetCanvas.height = video.videoHeight;
         ctx.drawImage(video, 0, 0, targetCanvas.width, targetCanvas.height);
 
+        // Inverte il flag, così la prossima volta salviamo nell'altro canvas
         firstImageCaptured = !firstImageCaptured;
 
+        // Se abbiamo appena salvato sul primo canvas, elaboriamo quell'immagine
         if (!firstImageCaptured) {
             processImage(canvas, output);
         }
@@ -53,11 +66,14 @@ document.addEventListener("DOMContentLoaded", function() {
         cv.Canny(gray, dst, 50, 150, 3, false);
 
         cv.imshow(outputCanvas, dst);
-        src.delete(); gray.delete(); dst.delete();
+        src.delete(); 
+        gray.delete(); 
+        dst.delete();
     }
 
     function compareImages() {
-        if (!firstImageCaptured) {
+        // Se firstImageCaptured è true, vuol dire che non abbiamo catturato la seconda immagine
+        if (firstImageCaptured) {
             alert("Devi acquisire due immagini per confrontarle!");
             return;
         }
@@ -69,7 +85,9 @@ document.addEventListener("DOMContentLoaded", function() {
         cv.absdiff(img1, img2, diff);
         cv.imshow(output, diff);
 
-        img1.delete(); img2.delete(); diff.delete();
+        img1.delete(); 
+        img2.delete(); 
+        diff.delete();
     }
 
     function generatePDF() {
@@ -92,5 +110,12 @@ document.addEventListener("DOMContentLoaded", function() {
         pdf.addImage(imgDataOutput, "PNG", 10, 190, 90, 60);
 
         pdf.save("report_pneumatico.pdf");
+    }
+
+    // Registrazione del Service Worker
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/service-worker.js")
+        .then(reg => console.log("Service Worker registrato con successo!", reg))
+        .catch(err => console.log("Errore nella registrazione del Service Worker", err));
     }
 });
