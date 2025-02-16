@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
     .catch(err => {
         console.error("Errore nell'accesso alla fotocamera:", err);
-        // Fallback
+        // Fallback se exact: "environment" non è supportato
         return navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
     })
     .then(stream => {
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function() {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
             if (outcome === "accepted") {
-                console.log("Installata!");
+                console.log("Installazione accettata");
             } else {
                 console.log("Installazione rifiutata");
             }
@@ -140,8 +140,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Registrazione del Service Worker
     if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./service-worker.js")
-        .then(reg => console.log("Service Worker registrato con successo!", reg))
-        .catch(err => console.log("Errore nella registrazione del Service Worker", err));
+        navigator.serviceWorker
+            .register("./service-worker.js")
+            .then(reg => console.log("Service Worker registrato con successo!", reg))
+            .catch(err => console.log("Errore nella registrazione del Service Worker", err));
     }
 });
