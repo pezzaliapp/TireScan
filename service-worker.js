@@ -2,13 +2,13 @@ self.addEventListener("install", event => {
   event.waitUntil(
     caches.open("tireScan-cache").then(cache => {
       return cache.addAll([
-        "/",
-        "/index.html",
-        "/style.css",
-        "/app.js",
-        "/manifest.json",
-        "/icons/TireScan-192.png",
-        "/icons/TireScan-512.png"
+        "./",  // root della cartella
+        "./index.html",
+        "./style.css",
+        "./app.js",
+        "./manifest.json",
+        "./icons/TireScan-192.png",
+        "./icons/TireScan-512.png"
       ]);
     })
   );
